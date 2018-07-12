@@ -9,12 +9,31 @@ express
 mongoDB
 
 #install
-
+ 
+# Запуск одной строкой
+ 
 #run the command СMD
-cd rater/server/   
+ 
+cd C:\rate       
+ 
+cd client & npm install & start npm start & cd .. & cd server & npm install & npm start
+
+
+# Обычный запуск
+#run the command СMD
+ 
+cd rater/server/ 
+   
 npm install
+ 
 npm start
+ 
 cd ..
+ 
 cd client
+ 
 npm install
+ 
 npm start
+
+
