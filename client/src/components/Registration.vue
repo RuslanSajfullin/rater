@@ -48,7 +48,9 @@
           username: '',
           password: '',
 		  repassword: '',
-		  submitted: false
+		  submitted: false,
+		  submitted2: false,
+		  
         }
       },
       methods: {
@@ -101,8 +103,8 @@
    
        if (repassword != '') {      
          if (password !== repassword) {
-             messagerepassword = 'Пароли не совпадают'
-			 this.submitted2=true; 
+             messagerepassword = 'Пароли не совпадают';
+	        this.submitted2=true; 
          }
        }
        this.message = message;
