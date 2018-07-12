@@ -17,12 +17,14 @@
           <label>Username</label>
         </div>
         <div class="group">
-          <input type="password" v-model="password"><span class="highlight"></span><span class="bar"></span>
+          <input type="password" v-model="password" v-on:input="valid11"><span class="highlight"></span><span class="bar"></span>
           <label>Password</label>
+		  <div v-show="submitted">{{ message }}</div>  
         </div>
         <div class="group">
-          <input type="password"><span class="highlight"></span><span class="bar"></span>
+          <input v-model="repassword" v-on:input="valid11"><span class="highlight"></span><span class="bar"></span>
           <label>Password confirm</label>
+		  <div v-show="submitted2">{{ messagerepassword }}</div> 
         </div>
         <div class="group">
         </div>
@@ -44,7 +46,9 @@
       data () {
         return {
           username: '',
-          password: ''
+          password: '',
+		  repassword: '',
+		  submitted: false
         }
       },
       methods: {
@@ -54,7 +58,57 @@
             password: this.password
           })
           this.$router.push({ name: 'Posts' })
-        }
+        },
+		async valid11  () { 
+		       var password = this.password,
+	   repassword = this.repassword,
+	   message = 'Пароль должен содержать ',
+	   messagerepassword;
+	   
+	   this.submitted=false; 
+
+       if (password.length < 6 ) {
+          message += 'более 6 символов ';
+		
+		 if (password === '') {
+			 message += 'более 6 символов ';
+		 }
+		  this.submitted=true; 
+	   }
+	  
+       if ( password.length > 25) {
+          message += 'более 25 символов';
+		  this.submitted=true; 
+       }
+	   
+	   if (password.replace(/\D+/g,"") === "") 
+       {
+	      message += ', цифры ';
+		  this.submitted=true; 
+	   }
+	   
+	   if (password.match(/[A-Z]/g) + password.match(/[А-Я]/g) == 0 ) 
+       {
+	      message += ', заглавные';
+		  this.submitted=true; 
+	   }
+	   
+	   if (password.match(/[a-z]/g) + password.match(/[a-я]/g) == 0 ) 
+       {
+	      message += ', строчные' ;
+		  this.submitted=true; 
+	   }
+   
+       if (repassword != '') {      
+         if (password !== repassword) {
+             messagerepassword = 'Пароли не совпадают'
+			 this.submitted2=true; 
+         }
+       }
+       this.message = message;
+       this.messagerepassword = messagerepassword;
+       }
+		
       }
     }
 </script>
