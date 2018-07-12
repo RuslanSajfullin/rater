@@ -60,6 +60,8 @@
         await UserService.signIn({
           username: this.username,
           password: this.password
+        }).then(response => {
+          localStorage.setItem('jwt',response.data.token)
         })
         this.$router.push({ name: 'Posts' })
       }
