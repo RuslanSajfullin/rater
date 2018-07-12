@@ -5,7 +5,6 @@ var bcrypt = require('bcrypt-nodejs');
 var UserSchema = new Schema({
     firstname: String,
     lastname: String,
-    test: String,
     username: {
         type: String,
         required: true
@@ -17,7 +16,8 @@ var UserSchema = new Schema({
         required: true
     },
     last_login: Date,
-    active_status: { type: Boolean, default: true }
+    active_status: { type: Boolean, default: true },
+    girls: []
 });
 
 UserSchema.pre('save', function (next) {
