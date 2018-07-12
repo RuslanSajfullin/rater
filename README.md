@@ -16,7 +16,7 @@ mongoDB
  
 cd C:\rate       
  
-cd client & npm install & start npm start & cd .. & cd server & npm install & npm start
+cd client & npm install & start npm start & cd../server & npm install & npm start
 
 
 # Обычный запуск
