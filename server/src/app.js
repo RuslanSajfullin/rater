@@ -104,10 +104,10 @@ app.post('/user_add', (req, res) => {
 })
 
 
-app.post('/signin', function(req, res) {
+app.post('/signin', (req, res) => {
     User.findOne({
         username: req.body.username
-    }, function(err, user) {
+    }, function (err, user) {
         if (err) throw err;
 
         if (!user) {
@@ -125,7 +125,8 @@ app.post('/signin', function(req, res) {
                 }
             });
         }
-});
+    })
+})
 
 app.put('/posts/:id', (req, res) => {
     var db = req.db;
