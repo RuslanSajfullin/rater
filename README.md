@@ -4,6 +4,7 @@
 vuex
 vue-router
 webpack
+passport
 axios
 express
 mongoDB
