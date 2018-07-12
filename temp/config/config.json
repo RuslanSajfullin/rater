@@ -1,0 +1,45 @@
+{
+
+  "development": {
+
+    "username": "sql7246525",
+
+    "password": "4bYbscQXcG",
+
+    "database": "sql7246525",
+
+    "host": "sql7.freemysqlhosting.net",
+
+    "dialect": "mysql"
+
+  },
+
+  "test": {
+
+    "username": "sql7246525",
+
+    "password": "4bYbscQXcG",
+
+    "database": "sql7246525",
+
+    "host": "sql7.freemysqlhosting.net",
+
+    "dialect": "mysql"
+
+  },
+
+  "production": {
+
+    "username": "sql7246525",
+
+    "password": "4bYbscQXcG",
+
+    "database": "sql7246525",
+
+    "host": "sql7.freemysqlhosting.net",
+
+    "dialect": "mysql"
+
+  }
+
+}
