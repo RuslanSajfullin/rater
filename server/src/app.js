@@ -1,12 +1,12 @@
-const express = require('express')
-const passport = require('passport')
-const session = require('express-session')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const morgan = require('morgan')
-var jwt = require('jsonwebtoken');
-
+const express = require('express');
+const passport = require('passport');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const morgan = require('morgan');
+const jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
+
 mongoose.connect('mongodb://localhost:27017/posts');
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
@@ -21,10 +21,10 @@ var Girl = require("../models/girl");
 
 require('../config/passport/passport.js')(passport);
 
-const app = express()
-app.use(morgan('combined'))
-app.use(bodyParser.json())
-app.use(cors())
+const app = express();
+app.use(morgan('combined'));
+app.use(bodyParser.json());
+app.use(cors());
 
 // For Passport
 app.use(session({
@@ -46,13 +46,12 @@ app.get('/posts', passport.authenticate('jwt', { session: false}),  (req, res) =
             }
             res.send({
                 posts: posts
-            })
-        }).sort({_id: -1})
-    }
-    else {
+            });
+        }).sort({_id: -1});
+    } else {
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
-})
+});
 
 app.post('/add_post', (req, res) => {
     var db = req.db;
@@ -61,26 +60,28 @@ app.post('/add_post', (req, res) => {
     var new_post = new Post({
         title: title,
         description: description
-    })
+    });
 
     new_post.save(function (error) {
         if (error) {
-            console.log(error)
+            console.log(error);
         }
         res.send({
             success: true
-        })
-    })
-})
+        });
+    });
+});
 
 app.get('/users', (req, res) => {
     User.find({}, 'username password', function (error, user) {
-        if (error) { console.error(error); }
+        if (error) {
+            console.error(error); 
+        }
         res.send({
             user: user
-        })
-    }).sort({_id:-1})
-})
+        });
+    }).sort({_id:-1});
+});
 
 app.post('/user_add', (req, res) => {
     var db = req.db;
@@ -92,44 +93,44 @@ app.post('/user_add', (req, res) => {
         var new_user = new User({
             username: username,
             password: password
-        })
+        });
 
         new_user.save(function (err) {
             if (err) {
                 return res.json({success: false, msg: 'Username already exists.'});
             }
             res.json({success: true, msg: 'Successful created new user.'});
-        })
+        });
     }
-})
+});
 
 
 app.post('/signin', function(req, res) {
     User.findOne({
-            username: req.body.username
-        }, function(err, user) {
-            if (err) throw err;
+        username: req.body.username
+    }, function(err, user) {
+        if (err) throw err;
 
-            if (!user) {
-                res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
-            } else {
-                // check if password matches
-                user.comparePassword(req.body.password, function (err, isMatch) {
-                    if (isMatch && !err) {
-                        // if user is found and password is right create a token
-                        var token = jwt.sign(user.toJSON(), 'nodeauthsecret');
-                        // return the information including token as JSON
-                        res.json({success: true, token: 'JWT ' + token});
-                    } else {
-                        res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
-                    }
-                });
-            }
+        if (!user) {
+            res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
+        } else {
+            // check if password matches
+            user.comparePassword(req.body.password, function (err, isMatch) {
+                if (isMatch && !err) {
+                    // if user is found and password is right create a token
+                    var token = jwt.sign(user.toJSON(), 'nodeauthsecret');
+                    // return the information including token as JSON
+                    res.json({success: true, token: 'JWT ' + token});
+                } else {
+                    res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
+                }
+            });
         }
-    )
-})
+    }
+    );
+});
 
-getToken = function (headers) {
+var getToken = function (headers) {
     if (headers && headers.authorization) {
         var parted = headers.authorization.split(' ');
         if (parted.length === 2) {
@@ -145,20 +146,22 @@ getToken = function (headers) {
 app.put('/posts/:id', (req, res) => {
     var db = req.db;
     Post.findById(req.params.id, 'title description', function (error, post) {
-        if (error) { console.error(error); }
+        if (error) {
+            console.error(error); 
+        }
 
-        post.title = req.body.title
-        post.description = req.body.description
+        post.title = req.body.title;
+        post.description = req.body.description;
         post.save(function (error) {
             if (error) {
-                console.log(error)
+                console.log(error);
             }
             res.send({
                 success: true
-            })
-        })
-    })
-})
+            });
+        });
+    });
+});
 
 app.delete('/posts/:id', (req, res) => {
     var db = req.db;
@@ -166,20 +169,22 @@ app.delete('/posts/:id', (req, res) => {
         _id: req.params.id
     }, function(err, post){
         if (err)
-            res.send(err)
+            res.send(err);
         res.send({
             success: true
-        })
-    })
-})
+        });
+    });
+});
 
 app.get('/post/:id', (req, res) => {
     var db = req.db;
     Post.findById(req.params.id, 'title description', function (error, post) {
-        if (error) { console.error(error); }
-        res.send(post)
-    })
-})
+        if (error) {
+            console.error(error); 
+        }
+        res.send(post);
+    });
+});
 
 
 app.post('/add_girl', (req, res) => {
@@ -189,51 +194,52 @@ app.post('/add_girl', (req, res) => {
     var new_girl = new Girl({
         name: name,
         level: level
-    })
+    });
 
     new_girl.save(function (error) {
         if (error) {
-            console.log(error)
+            console.log(error);
         }
         res.send({
             success: true
-        })
-    })
-})
+        });
+    });
+});
 
 app.get('/girls', passport.authenticate('jwt', { session: false}),  (req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        Girl.find({}, 'name level', function (error, posts) {
+        Girl.find({}, 'name level', function (error, girls) {
             if (error) {
                 console.error(error);
             }
             res.send({
-                posts: posts
-            })
-        }).sort({_id: -1})
-    }
-    else {
+                girls: girls
+            });
+        }).sort({_id: -1});
+    } else {
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
-})
+});
 
 app.put('/girls/:id', (req, res) => {
     var db = req.db;
-    Girl.findById(req.params.id, 'name level', function (error, post) {
-        if (error) { console.error(error); }
+    Girl.findById(req.params.id, 'name level', function (error, girl) {
+        if (error) {
+            console.error(error); 
+        }
 
-        girl.level = req.body.level
-        post.save(function (error) {
+        girl.level = req.body.level;
+        girl.save(function (error) {
             if (error) {
-                console.log(error)
+                console.log(error);
             }
             res.send({
                 success: true
-            })
-        })
-    })
-})
+            });
+        });
+    });
+});
 
 app.delete('/girls/:id', (req, res) => {
     var db = req.db;
@@ -241,12 +247,12 @@ app.delete('/girls/:id', (req, res) => {
         _id: req.params.id
     }, function(err, girl){
         if (err)
-            res.send(err)
+            res.send(err);
         res.send({
             success: true
-        })
-    })
-})
+        });
+    });
+});
 
 app.listen(process.env.PORT || 8081,function(err){
 
@@ -254,6 +260,6 @@ app.listen(process.env.PORT || 8081,function(err){
 
         console.log("Site is live");
 
-    else console.log(err)
+    else console.log(err);
 
-})
+});
