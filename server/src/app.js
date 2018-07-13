@@ -16,6 +16,7 @@ db.once("open", function(callback){
 
 var User = require("../models/user");
 var Post = require("../models/post");
+var Girl = require("../models/girl");
 //load passport strategies
 
 require('../config/passport/passport.js')(passport);
@@ -38,7 +39,6 @@ app.use(passport.session()); // persistent login sessions
 
 app.get('/posts', passport.authenticate('jwt', { session: false}),  (req, res) => {
     var token = getToken(req.headers);
-    console.log(req.headers.token);
     if (token) {
         Post.find({}, 'title description', function (error, posts) {
             if (error) {
@@ -178,6 +178,73 @@ app.get('/post/:id', (req, res) => {
     Post.findById(req.params.id, 'title description', function (error, post) {
         if (error) { console.error(error); }
         res.send(post)
+    })
+})
+
+
+app.post('/add_girl', (req, res) => {
+    var db = req.db;
+    var name = "Asuna";
+    var level = 1;
+    var new_girl = new Girl({
+        name: name,
+        level: level
+    })
+
+    new_girl.save(function (error) {
+        if (error) {
+            console.log(error)
+        }
+        res.send({
+            success: true
+        })
+    })
+})
+
+app.get('/girls', passport.authenticate('jwt', { session: false}),  (req, res) => {
+    var token = getToken(req.headers);
+    if (token) {
+        Girl.find({}, 'name level', function (error, posts) {
+            if (error) {
+                console.error(error);
+            }
+            res.send({
+                posts: posts
+            })
+        }).sort({_id: -1})
+    }
+    else {
+        return res.status(403).send({success: false, msg: 'Unauthorized.'});
+    }
+})
+
+app.put('/girls/:id', (req, res) => {
+    var db = req.db;
+    Girl.findById(req.params.id, 'name level', function (error, post) {
+        if (error) { console.error(error); }
+
+        girl.level = req.body.level
+        post.save(function (error) {
+            if (error) {
+                console.log(error)
+            }
+            res.send({
+                success: true
+            })
+        })
+    })
+})
+
+app.delete('/girls/:id', (req, res) => {
+    var db = req.db;
+    Girl.remove({
+        _id: req.params.id
+    }, function(err, girl){
+        if (err)
+            res.send(err)
+        res.send({
+            success: true
+        })
     })
 })
 
