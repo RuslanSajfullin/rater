@@ -1,8 +1,7 @@
 <template>
   <div class="game">
     <h1>Add game</h1>
-    <div class="form">    
-	  
+    <div class="form">
     <div>
     <form v-on:submit.prevent="addNewTodo">
     <label for="new-todo">Добавить девку</label>
@@ -26,64 +25,55 @@
 </template>
 
 <script>
-  //import Vue from '@vue.vue'
-  import GameService from '@/services/GameService'
-  export default {
-    name: 'Game',
-    data () {
-      return {
-	   newTodoText: '',
-	      description: '',
-       todos: [
-      {
-        id: 1,
-        title: 'Viki',
-		level:0
-      },
-      {
-        id: 2,
-        title: 'Dana',
-		level:0
-      },
-      {
-        id: 3,
-        title: 'Asakawa',
-		level:0
-      }
-    ],
-    nextTodoId: 4,
-     
-      }
+import GameService from '@/services/GameService'
+export default {
+  name: 'Game',
+  data () {
+    return {
+      newTodoText: '',
+      description: '',
+      todos: [
+        {
+          id: 1,
+          title: 'Viki',
+          level: 0
+        },
+        {
+          id: 2,
+          title: 'Dana',
+          level: 0
+        },
+        {
+          id: 3,
+          title: 'Asakawa',
+          level: 0
+        }
+      ],
+      nextTodoId: 4
+    }
+  },
+  methods: {
+    async addGame () {
+      await GameService.addGame({
+        title: this.title,
+        description: this.description
+      })
+      this.$router.push({ name: 'Game' })
     },
-    methods: {
-      async addGame () {
-        await GameService.addGame({
-          title: this.title,
-          description: this.description
-        })
-        this.$router.push({ name: 'Game' })
-      },
-	  
-	  addNewTodo: function () {
+    addNewTodo: function () {
       this.todos.push({
         id: this.nextTodoId++,
         title: this.newTodoText,
-		level:0
+        level: 0
       })
       this.newTodoText = ''
     },
-		async valid11  (title) { 
-		     console.log("dana da" +title)
-       },
-	   
-	   removeElement : function(index){
-       
-	   delete this.todos[index];
-	   this.$delete(this.todos, index);	
-    }
-	     
+    removeElement: function (index) {
+      delete this.todos[index]
+      this.$delete(this.todos, index)
     }
   }
+}
 </script>
 <style type="text/css">
   .form input, .form textarea {

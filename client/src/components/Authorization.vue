@@ -157,7 +157,6 @@
     transition: all 0.2s ease;
   }
 
-
   /* active */
 
   input:focus ~ label, input.used ~ label {
@@ -167,7 +166,6 @@
     /* font-size: 14px; */
     color: #4a89dc;
   }
-
 
   /* Underline */
 
@@ -191,13 +189,7 @@
 
   .bar:after { right: 50%; }
 
-
-  /* active */
-
   input:focus ~ .bar:before, input:focus ~ .bar:after { width: 50%; }
-
-
-  /* Highlight */
 
   .highlight {
     position: absolute;
@@ -209,16 +201,10 @@
     opacity: 0.5;
   }
 
-
-  /* active */
-
   input:focus ~ .highlight {
     -webkit-animation: inputHighlighter 0.3s ease;
     animation: inputHighlighter 0.3s ease;
   }
-
-
-  /* Animations */
 
   @-webkit-keyframes inputHighlighter {
     from { background: #4a89dc; }
@@ -229,9 +215,6 @@
     from { background: #4a89dc; }
     to 	{ width: 0; background: transparent; }
   }
-
-
-  /* Button */
 
   .button {
     position: relative;
@@ -254,18 +237,12 @@
   }
   .button:focus { outline: 0; }
 
-
-  /* Button modifiers */
-
   .buttonBlue {
     background: #4a89dc;
     text-shadow: 1px 1px 0 rgba(39, 110, 204, .5);
   }
 
   .buttonBlue:hover { background: #357bd8; }
-
-
-  /* Ripples container */
 
   .ripples {
     position: absolute;
@@ -276,9 +253,6 @@
     overflow: hidden;
     background: transparent;
   }
-
-
-  /* Ripples circle */
 
   .ripplesCircle {
     position: absolute;
@@ -297,9 +271,6 @@
     -webkit-animation: ripples .4s ease-in;
     animation: ripples .4s ease-in;
   }
-
-
-  /* Ripples animation */
 
   @-webkit-keyframes ripples {
     0% { opacity: 0; }

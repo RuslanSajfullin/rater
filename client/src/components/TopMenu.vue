@@ -4,14 +4,14 @@
     <li><router-link v-bind:to="'/authorization'">Authorization</router-link></li>
     <li><router-link v-bind:to="'/posts'">Posts</router-link></li>
     <li><router-link v-bind:to="'/param'">Param Link</router-link></li>
-	 <li><router-link v-bind:to="'/game'">Game Girls</router-link></li>
+    <li><router-link v-bind:to="'/game'">Game Girls</router-link></li>
   </ul>
 </template>
 
 <script>
-    export default {
-        name: "test"
-    }
+export default {
+  name: 'test'
+}
 </script>
 
 <style scoped>

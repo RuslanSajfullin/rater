@@ -25,18 +25,18 @@
         description: ''
       }
     },
-    mounted () {
+  mounted () {
       this.getPost()
     },
     methods: {
-      async getPost () {
+    async getPost () {
         const response = await PostsService.getPost({
           id: this.$route.params.id
         })
         this.title = response.data.title
         this.description = response.data.description
       },
-      async updatePost () {
+    async updatePost () {
         await PostsService.updatePost({
           id: this.$route.params.id,
           title: this.title,
@@ -50,8 +50,8 @@
 <style type="text/css">
   .form input, .form textarea {
     width: 500px;
-    padding: 10px;
-    border: 1px solid #e0dede;
+  padding: 10px;
+border: 1px solid #e0dede;
     outline: none;
     font-size: 12px;
   }

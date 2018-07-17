@@ -9,7 +9,7 @@ export default {
     return Api().post('user_add', params)
   },
 
-  signIn(params) {
+  signIn (params) {
     return Api().post('signin', params)
   }
 }
