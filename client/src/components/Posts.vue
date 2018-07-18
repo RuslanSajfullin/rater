@@ -29,26 +29,26 @@
 </template>
 
 <script>
-  import PostsService from '@/services/PostsService'
+import PostsService from '@/services/PostsService'
   export default {
     name: 'posts',
     data () {
-      return {
-        posts: []
-      }
-    },
-    mounted () {
-      this.getPosts()
-    },
-    methods: {
-      async getPosts () {
-        const response = await PostsService.fetchPosts()
+    return {
+      posts: []
+    }
+  },
+  mounted () {
+    this.getPosts()
+  },
+  methods: {
+    async getPosts () {
+      const response = await PostsService.fetchPosts()
         this.posts = response.data.posts
-      },
-      async deletePost (id) {
-        await PostsService.deletePost(id)
-        this.$router.push({ name: 'Posts' })
-        this.getPosts()
+    },
+    async deletePost (id) {
+      await PostsService.deletePost(id)
+      this.$router.push({ name: 'Posts' })
+      this.getPosts()
       }
     }
   }

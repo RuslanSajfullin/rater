@@ -4,7 +4,7 @@ import Posts from '@/components/Posts'
 import NewPost from '@/components/NewPost'
 import EditPost from '@/components/EditPost'
 import Hello from '@/components/Hello'
-
+import Game from '@/components/Game'
 
 const routes = [
   {
@@ -34,8 +34,13 @@ const routes = [
   },
   {
     path: '/posts/:id/edit',
-    component: EditPost,
-    name: 'EditPost'
+    name: 'EditPost',
+    component: EditPost
+  },
+  {
+    path: '/game',
+    name: 'Game',
+    component: Game
   }
   ]
 
