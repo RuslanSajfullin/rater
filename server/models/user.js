@@ -16,8 +16,7 @@ var UserSchema = new Schema({
         required: true
     },
     last_login: Date,
-    active_status: { type: Boolean, default: true },
-    girls: []
+    active_status: { type: Boolean, default: true }
 });
 
 UserSchema.pre('save', function (next) {
