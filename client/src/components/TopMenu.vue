@@ -1,12 +1,12 @@
 <template>
   <div class="menu-main">
-  <div><button v-on:click.prevent="removeElement(todo.id-1)">Выход</button></div>
-  <ul>
+   <ul>
     <li><router-link v-bind:to="'/'">Home</router-link></li>
     <li><router-link v-bind:to="'/authorization'">Authorization</router-link></li>
     <li><router-link v-bind:to="'/posts'">Posts</router-link></li>
     <li><router-link v-bind:to="'/param'">Param Link</router-link></li>
     <li><router-link v-bind:to="'/game'">Game Girls</router-link></li>
+
   </ul>
   </div>
 </template>

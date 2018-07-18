@@ -3,32 +3,23 @@
     <h1>Add game</h1>
     <div class="form">
     <div>
-    <form v-on:submit.prevent="addNewTodo">
-    <label for="new-todo">Добавить девку</label>
-    <input
-      v-model="newTodoText"
-      id="new-todo"
-      placeholder="Имя конфетки"
-    >
-    <button>Добавить</button>
-  </form>
-    <ul>
-    <li
-      v-for="(todo, index) in todos"
-      v-bind:key="todo.id"
-      v-bind:title="todo.name"
-    >{{todo.id +  todo.name }}<button v-on:click="addNewTodo11(todo)">Повысить</button><button v-on:click.prevent="removeElement(todo.id-1)">Удалить</button></li>
-  </ul>
-  
-    <select v-model="selectedUser">
-        <option v-for="todo in todos" v-bind:value="todo.name">{{todo.name}}</option>
-    </select>
-	 <span>Выбрано: {{selectedUser}}</span>
+    
       </div>
+	      <div id="app">
+		  <ui>
+		  <li>
+    <select v-model="selectedUser">
+        <option v-for="user in users" v-bind:value="user.name">{{user.name}}</option>
+    </select>
+	</li>
+	<li>
+    <span>Выбрано: {{selectedUser}}</span>
+	</li>
+	</ui>
+</div>
     </div>
   </div>
 </template>
-
 <script>
 import GameService from '@/services/GameService'
 export default {
@@ -37,25 +28,13 @@ export default {
     return {
       newTodoText: '',
       description: '',
-      todos: [
-        {
-          id: 1,
-          name: 'Viki',
-          name: 0
-        },
-        {
-          id: 2,
-          name: 'Dana',
-          level: 0
-        },
-        {
-          id: 3,
-          name: 'Asakawa',
-          level: 0
-        }
-      ],
-      nextTodoId: 4,
-	     selectedUser:''
+      users:[
+                {name:'Tom', age:22},
+                {name:'Bob', age:25},
+                {name:'Sam', age:28},
+                {name:'Alice', age:26}
+            ],
+            selectedUser:''
     }
   },
   methods: {
@@ -103,4 +82,5 @@ export default {
     border: none;
     cursor: pointer;
   }
+
 </style>
