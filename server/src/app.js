@@ -97,7 +97,7 @@ app.post('/add_post', passport.authenticate('jwt', { session: true}), (req, res)
     }
 });
 
-//ПРОВЕРИТЬ НЕОБХОДИМОСТЬ!
+//???ПРОВЕРИТЬ НЕОБХОДИМОСТЬ!
 app.get('/users', (req, res) => {
     User.find({}, 'username password', function (error, user) {
         if (error) {
@@ -292,6 +292,20 @@ app.delete('/girl/:id', passport.authenticate('jwt', { session: true}),  (req, r
             res.send({
                 success: true
             });
+        });
+    } else {
+        return res.status(403).send({success: false, msg: 'Unauthorized.'});
+    }
+});
+
+app.delete('/sessions', passport.authenticate('jwt', { session: true}), function(req, res) {
+    var token = getToken(req.headers);
+    if (token) {// Удалить сессию
+        if (req.session) {
+            req.session.destroy(function() {});
+        }
+        res.send({
+            success: true
         });
     } else {
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
