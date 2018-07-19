@@ -1,5 +1,4 @@
 <template>
-
   <div id="authorization" class="authorization">
     <div class="social">
       Social networks
@@ -283,45 +282,4 @@
       opacity: 0;
     }
   }
-
-  @keyframes ripples {
-    0% { opacity: 0; }
-
-    25% { opacity: 1; }
-
-    100% {
-      width: 200%;
-      padding-bottom: 200%;
-      opacity: 0;
-    }
-  }
-
-  footer { text-align: center; }
-
-  footer p {
-    color: #888;
-    font-size: 13px;
-    letter-spacing: .4px;
-  }
-
-  footer a {
-    color: #4a89dc;
-    text-decoration: none;
-    transition: all .2s ease;
-  }
-
-  footer a:hover {
-    color: #666;
-    text-decoration: underline;
-  }
-
-  footer img {
-    width: 80px;
-    transition: all .2s ease;
-  }
-
-  footer img:hover { opacity: .83; }
-
-  footer img:focus , footer a:focus { outline: none; }
-
 </style>
