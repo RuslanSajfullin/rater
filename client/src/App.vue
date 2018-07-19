@@ -26,7 +26,7 @@
   }
 
   body {
-    background: url('./assets/images/vizualnoj.jpg') no-repeat center center fixed;
+ /*   background: url('./assets/images/vizualnoj.jpgэ') no-repeat center center fixed;
     &:after {
       content: '';
       position: fixed;
@@ -37,6 +37,6 @@
       background-color: $background-tint;
       opacity: .3;
       z-index: -1;
-    }
+    }*/
   }
 </style>
