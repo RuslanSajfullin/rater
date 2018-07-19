@@ -2,22 +2,22 @@
   <div class="game">
     <h1>Add game</h1>
     <div class="form">
-    <div>
-    
-      </div>
+  
 	      <div id="app">
 		  <ui>
-		  <li>
+		 
     <select v-model="selectedUser">
         <option v-for="user in users" v-bind:value="user.name">{{user.name}}</option>
-    </select>
-	</li>
-	<li>
-    <span>Выбрано: {{selectedUser}}</span>
-	</li>
+	    </select>
+
+
 	</ui>
 </div>
+<agile>
+    <div class="slide slide--1"><h3>Выбрано: {{selectedUser}}</h3></div>
+</agile>
     </div>
+
   </div>
 </template>
 <script>
@@ -29,9 +29,9 @@ export default {
       newTodoText: '',
       description: '',
       users:[
-                {name:'Tom', age:22},
-                {name:'Bob', age:25},
-                {name:'Sam', age:28},
+                {name:'Asakawa', age:22},
+                {name:'Vikki', age:25},
+                {name:'Dana', age:28},
                 {name:'Alice', age:26}
             ],
             selectedUser:''
