@@ -24,4 +24,19 @@
     text-align: center;
     margin-top: 60px;
   }
+
+  body {
+    background: url('./assets/images/vizualnoj.jpg') no-repeat center center fixed;
+    &:after {
+      content: '';
+      position: fixed;
+    background-repeat: no-repeat;
+    background-size: 80% 80%;
+      top: 0;
+      left: 0;
+      background-color: $background-tint;
+      opacity: .3;
+      z-index: -1;
+    }
+  }
 </style>

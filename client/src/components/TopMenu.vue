@@ -13,8 +13,15 @@
 </template>
 
 <script>
-export default {
-  name: 'test'
+
+ export default {
+  name: 'test',
+   methods: {
+    exit: function (index) {
+      delete this.todos[index]
+      this.$delete(this.todos, index)
+    }
+  }
 }
 </script>
 
@@ -25,7 +32,7 @@ export default {
     margin: 40px 0 5px;
     padding: 25px 0 5px;
     text-align: center;
-    background: white;
+
   }
   .menu-main li {display: inline-block;}
   .menu-main li:after {
@@ -42,10 +49,12 @@ export default {
     position: relative;
     padding-bottom: 20px;
     margin: 0 34px 0 30px;
-    font-size: 17px;
+    font-size: 25px;
     text-transform: uppercase;
     display: inline-block;
     transition: color .2s;
+color: #fff;
+  
   }
   .menu-main a, .menu-main a:visited {color: #9d999d;}
   .menu-main a.current, .menu-main a:hover{color: #feb386;}
