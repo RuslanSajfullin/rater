@@ -2,22 +2,17 @@
   <div class="game">
     <h1>Add game</h1>
     <div class="form">
-  
 	      <div id="app">
 		  <ui>
-		 
-    <select v-model="selectedUser">
+		<select v-model="selectedUser">
         <option v-for="user in users" v-bind:value="user.name">{{user.name}}</option>
 	    </select>
-
-
 	</ui>
 </div>
 <agile>
     <div class="slide slide--1"><h3>Выбрано: {{selectedUser}}</h3></div>
 </agile>
     </div>
-
   </div>
 </template>
 <script>
