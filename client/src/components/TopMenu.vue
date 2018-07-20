@@ -53,10 +53,9 @@
     text-transform: uppercase;
     display: inline-block;
     transition: color .2s;
-color: #fff;
-  
+    color: #fff; 
   }
-  .menu-main a, .menu-main a:visited {color: #9d999d;}
+  .menu-main a, .menu-main a:visited {color: #2f5687;}
   .menu-main a.current, .menu-main a:hover{color: #feb386;}
   .menu-main a:before,
   .menu-main a:after {
