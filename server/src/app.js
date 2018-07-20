@@ -12,6 +12,7 @@ const app = express();
 var User = require("../models/user");
 var Post = require("../models/post");
 var Girl = require("../models/girl");
+var GirlType = require("../models/girlType");
 
 mongoose.connect('mongodb://localhost:27017/posts');
 db.on("error", console.error.bind(console, "connection error"));
@@ -59,7 +60,6 @@ var getToken = function (headers) {
 app.get('/posts', passport.authenticate('jwt', { session: true}), (req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        console.log(req.user._id);
         Post.find({}, 'title description', function (error, posts) {
             if (error) {
                 console.error(error);
@@ -213,28 +213,54 @@ app.get('/post/:id', passport.authenticate('jwt', { session: true}),(req, res) =
     }
 });
 
-
 app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) => {
     var token = getToken(req.headers);
     if (token) {
         var db = req.db;
-        var userId = req.user._id;
-        var name = "Asuna";
-        var level = 1;
-        var newGirl = new Girl({
-            userId: userId,
-            name: name,
-            level: level
-        });
-
-        newGirl.save(function (error) {
+        GirlType.findById(req.params.id, 'title description', function (error, girlType) {
             if (error) {
-                console.log(error);
+                console.error(error);
             }
-            res.send({
-                success: true
+            var userId = req.user._id;
+            var name = girlType.name;
+            var price = girlType.price;
+            var updatePrice = girlType.updatePrice;
+            var incomeInHour = girlType.incomeInHour;
+            var recoupment = girlType.recoupment;
+            var newGirl = new Girl({
+                userId: userId,
+                name: name,
+                price: price,
+                initialIncomeInHour: incomeInHour,
+                updatePrice: updatePrice,
+                incomeInHour: incomeInHour,
+                recoupment: recoupment,
+            });
+            newGirl.save(function (error) {
+                if (error) {
+                    console.log(error);
+                }
+                res.send({
+                    success: true
+                });
             });
         });
+    } else {
+        return res.status(403).send({success: false, msg: 'Unauthorized.'});
+    }
+});
+
+app.get('/girlType', passport.authenticate('jwt', { session: true}),  (req, res) => {
+    var token = getToken(req.headers);
+    if (token) {
+        GirlType.find({}, 'price name updatePrice incomeInHour recoupment', function (error, girlType) {
+            if (error) {
+                console.error(error);
+            }
+            res.send({
+                girlType: girlType
+            });
+        }).sort({_id: -1});
     } else {
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
@@ -243,7 +269,7 @@ app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) 
 app.get('/girls', passport.authenticate('jwt', { session: true}),  (req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        Girl.find({userId: req.user._id}, 'userId level', function (error, girls) {
+        Girl.find({userId: req.user._id}, 'price name updatePrice incomeInHour recoupment level', function (error, girls) {
             if (error) {
                 console.error(error);
             }
@@ -260,12 +286,16 @@ app.put('/girl/:id', passport.authenticate('jwt', { session: true}),  (req, res)
     var token = getToken(req.headers);
     if (token) {
         var db = req.db;
+        const period = 180,
+            hours = 24,
+            koeff = 1.0075;
         Girl.findById(req.params.id, 'name level', function (error, girl) {
             if (error) {
                 console.error(error); 
             }
-
             girl.level = girl.level + 1;
+            girl.incomeInHour = girl.price / period / hours * (1.0075 ^ girl.level) + girl.level * girl.updatePrice / girl.price * girl.initialIncomeInHour * (1.0075 ^ girl.level);
+            girl.recoupment = (girl.updatePrice + girl.price * girl.level)/girl.incomeInHour/hours;
             girl.save(function (error) {
                 if (error) {
                     console.log(error);
