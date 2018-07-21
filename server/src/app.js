@@ -6,14 +6,13 @@ const cors = require('cors');
 const morgan = require('morgan');
 const jwt = require('jsonwebtoken');
 const config  = require('../config/mongo/config');
-var mongoose = require('mongoose');
-var MongoStore = require('connect-mongo')(session);
-var db = mongoose.connection;
+const mongoose = require('mongoose');
+//const MongoStore = require('connect-mongo')(session);
+const db = mongoose.connection;
 const app = express();
 var User = require("../models/user");
 var Post = require("../models/post");
 var Girl = require("../models/girl");
-//var GirlType = require("../models/girlType");
 //TODO вынести апи в отдельную директорию
 
 mongoose.connect(config.db.uri);
@@ -122,7 +121,6 @@ app.post('/user_add', (req, res) => {
             username: username,
             password: password
         });
-
         new_user.save(function (err) {
             if (err) {
                 return res.json({success: false, msg: 'Username already exists.'});
@@ -132,13 +130,11 @@ app.post('/user_add', (req, res) => {
     }
 });
 
-
 app.post('/signin', function(req, res) {
     User.findOne({
         username: req.body.username
     }, function(err, user) {
         if (err) throw err;
-
         if (!user) {
             res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
         } else {
@@ -219,7 +215,7 @@ app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) 
     var token = getToken(req.headers);
     if (token) {
         var db = req.db;
-        db.collection("girlTypes").findById(req.params.id, 'title description', function (error, girlType) {
+        db.collection("girlTypes").findById({},{_id: req.params.id}).toArray(function(error, girlType) {
             if (error) {
                 console.error(error);
             }
@@ -255,14 +251,14 @@ app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) 
 app.get('/girlType', passport.authenticate('jwt', { session: true}),  (req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        db.collection("girlTypes").find({}, 'price name updatePrice incomeInHour recoupment', function (error, girlType) {
+        db.collection("girlTypes").find({}).toArray(function(error, girlType) {
             if (error) {
                 console.error(error);
             }
             res.send({
                 girlType: girlType
             });
-        }).sort({_id: -1}).toArray();
+        });
     } else {
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
@@ -296,7 +292,7 @@ app.put('/girl/:id', passport.authenticate('jwt', { session: true}),  (req, res)
                 console.error(error); 
             }
             girl.level = girl.level + 1;
-            girl.incomeInHour = girl.price / period / hours * (1.0075 ^ girl.level) + girl.level * girl.updatePrice / girl.price * girl.initialIncomeInHour * (1.0075 ^ girl.level);
+            girl.incomeInHour = girl.price / period / hours * (koeff ^ girl.level) + girl.level * girl.updatePrice / girl.price * girl.initialIncomeInHour * (koeff ^ girl.level);
             girl.recoupment = (girl.updatePrice + girl.price * girl.level)/girl.incomeInHour/hours;
             girl.save(function (error) {
                 if (error) {
