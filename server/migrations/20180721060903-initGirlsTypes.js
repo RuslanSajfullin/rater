@@ -52,8 +52,6 @@ module.exports = {
 			} else {
 				await createCollection(db);
 				await insertCollection(db);
-				//var aaa = await db.collection("a111").find().toArray();
-				//console.log(aaa);
 			}
 	},
 

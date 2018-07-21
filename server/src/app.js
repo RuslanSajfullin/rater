@@ -142,7 +142,7 @@ app.post('/signin', function(req, res) {
             user.comparePassword(req.body.password, function (err, isMatch) {
                 if (isMatch && !err) {
                     // if user is found and password is right create a token
-                    var token = jwt.sign(user.toJSON(), 'nodeauthsecret');
+                    var token = jwt.sign(user.toJSON(), 'nodeauthsecret1', { expiresIn: 900 });
                     res.json({success: true, token: 'JWT ' + token});
                 } else {
                     res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
