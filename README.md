@@ -16,7 +16,7 @@ mongoDB
 C:\rate\cd client & npm install & start npm start & cd../server & npm install & npm start
 
 # Обычный запуск
-#run the command СMD
+# run the command СMD
  
 cd rater/server/ 
    
@@ -32,4 +32,8 @@ npm install
  
 npm start
 
+# Миграции
 
+npm run migrate up --установка миграции
+
+npm run migrate down --откат миграции

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const jwt = require('jsonwebtoken');
+const config  = require('../config/mongo/config');
 var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(session);
 var db = mongoose.connection;
@@ -12,16 +13,17 @@ const app = express();
 var User = require("../models/user");
 var Post = require("../models/post");
 var Girl = require("../models/girl");
-var GirlType = require("../models/girlType");
+//var GirlType = require("../models/girlType");
+//TODO вынести апи в отдельную директорию
 
-mongoose.connect('mongodb://localhost:27017/posts');
+mongoose.connect(config.db.uri);
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", function(callback){
     console.log("Connection Succeeded");
 });
 
 //load passport strategies
-//??? проверить в будущем синтаксис
+//TODO проверить в будущем синтаксис
 require('../config/passport/passport.js')(passport);
 
 app.use(morgan('combined'));
@@ -97,7 +99,7 @@ app.post('/add_post', passport.authenticate('jwt', { session: true}), (req, res)
     }
 });
 
-//???ПРОВЕРИТЬ НЕОБХОДИМОСТЬ!
+//TODO ПРОВЕРИТЬ НЕОБХОДИМОСТЬ!
 app.get('/users', (req, res) => {
     User.find({}, 'username password', function (error, user) {
         if (error) {
@@ -217,7 +219,7 @@ app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) 
     var token = getToken(req.headers);
     if (token) {
         var db = req.db;
-        GirlType.findById(req.params.id, 'title description', function (error, girlType) {
+        db.collection("girlTypes").findById(req.params.id, 'title description', function (error, girlType) {
             if (error) {
                 console.error(error);
             }
@@ -244,7 +246,7 @@ app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) 
                     success: true
                 });
             });
-        });
+        }).toArray();
     } else {
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
@@ -253,14 +255,14 @@ app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) 
 app.get('/girlType', passport.authenticate('jwt', { session: true}),  (req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        GirlType.find({}, 'price name updatePrice incomeInHour recoupment', function (error, girlType) {
+        db.collection("girlTypes").find({}, 'price name updatePrice incomeInHour recoupment', function (error, girlType) {
             if (error) {
                 console.error(error);
             }
             res.send({
                 girlType: girlType
             });
-        }).sort({_id: -1});
+        }).sort({_id: -1}).toArray();
     } else {
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
@@ -342,7 +344,7 @@ app.delete('/sessions', passport.authenticate('jwt', { session: true}), function
     }
 });
 
-app.listen(process.env.PORT || 8081,function(err){
+app.listen(process.env.PORT || config.port,function(err){
 
     if (!err)
 
