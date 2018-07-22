@@ -1,8 +1,8 @@
 import Api from '@/services/Api'
 
 export default {
-  fetchGame () {
-    return Api().get('game')
+  fetchGirlTypes () {
+    return Api().get('girlType')
   },
 
   addGame (params) {
@@ -11,10 +11,6 @@ export default {
 
   updateGame (params) {
     return Api().put('game/' + params.id, params)
-  },
-
-  getGame (params) {
-    return Api().get('game/' + params.id)
   },
 
   deleteGame (id) {

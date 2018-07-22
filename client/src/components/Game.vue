@@ -5,7 +5,7 @@
 	      <div id="app">
 		  <ui>
 		<select v-model="selectedUser">
-        <option v-for="user in users" v-bind:value="user.name">{{user.name}}</option>
+        <option v-for="girlType in girlTypes" v-bind:value="girlType.name">{{girlType.name}}</option>
 	    </select>
 	</ui>
 </div>
@@ -18,21 +18,24 @@
 <script>
 import GameService from '@/services/GameService'
 export default {
-  name: 'Game',
+  name: 'Girls',
   data () {
     return {
       newTodoText: '',
       description: '',
-      users:[
-                {name:'Asakawa', age:22},
-                {name:'Vikki', age:25},
-                {name:'Dana', age:28},
-                {name:'Alice', age:26}
+      girlTypes:[
             ],
             selectedUser:''
     }
   },
+  mounted () {
+    this.getGirlTypes()
+  },
   methods: {
+    async getGirlTypes () {
+      const response = await GameService.fetchGirlTypes()
+      this.girlTypes = response.data.girlType
+    },
     async addGame () {
       await GameService.addGame({
         title: this.title,
