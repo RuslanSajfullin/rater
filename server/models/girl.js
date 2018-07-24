@@ -2,15 +2,16 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-    userId: String,
-    name: String,
-    price: Number,
-    initialIncomeInHour: Number,
-    updatePrice: Number,
-    incomeInHour: Number,
-    recoupment: Number,
-    level: { type: Number, default: 0 },
+    userId: { type: String, required: true },
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+    initialIncomeInHour: { type: Number, required: true },
+    updatePrice: { type: Number, required: true },
+    incomeInHour: { type: Number, required: true },
+    recoupment: { type: Number, required: true },
+    level: { type: Number, required: true, default: 0, max: 10, min: 0 },
     created: {
+        required: true,
         type: Date,
         default: Date.now
     }

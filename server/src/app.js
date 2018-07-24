@@ -5,9 +5,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const jwt = require('jsonwebtoken');
-const config  = require('../config/mongo/config');
+const config  = require('../config/mongo/db');
 const mongoose = require('mongoose');
-//const MongoStore = require('connect-mongo')(session);
 const db = mongoose.connection;
 const app = express();
 var User = require("../models/user");
@@ -77,7 +76,6 @@ app.get('/posts', passport.authenticate('jwt', { session: true}), (req, res) => 
 app.post('/add_post', passport.authenticate('jwt', { session: true}), (req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        var db = req.db;
         var title = req.body.title;
         var description = req.body.description;
         var new_post = new Post({
@@ -111,7 +109,6 @@ app.get('/users', (req, res) => {
 });
 
 app.post('/user_add', (req, res) => {
-    var db = req.db;
     if (!req.body.username || !req.body.password) {
         res.json({success: false, msg: 'Please pass username and password.'});
     } else {
@@ -156,7 +153,6 @@ app.post('/signin', function(req, res) {
 app.put('/posts/:id', passport.authenticate('jwt', { session: true}),(req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        var db = req.db;
         Post.findById(req.params.id, 'title description', function (error, post) {
             if (error) {
                 console.error(error); 
@@ -181,7 +177,6 @@ app.put('/posts/:id', passport.authenticate('jwt', { session: true}),(req, res) 
 app.delete('/posts/:id', passport.authenticate('jwt', { session: true}),(req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        var db = req.db;
         Post.remove({
             _id: req.params.id
         }, function(err, post){
@@ -199,7 +194,6 @@ app.delete('/posts/:id', passport.authenticate('jwt', { session: true}),(req, re
 app.get('/post/:id', passport.authenticate('jwt', { session: true}),(req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        var db = req.db;
         Post.findById(req.params.id, 'title description', function (error, post) {
             if (error) {
                 console.error(error); 
@@ -214,7 +208,6 @@ app.get('/post/:id', passport.authenticate('jwt', { session: true}),(req, res) =
 app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        var db = req.db;
         db.collection("girlTypes").findById({},{_id: req.params.id}).toArray(function(error, girlType) {
             if (error) {
                 console.error(error);
@@ -237,8 +230,11 @@ app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) 
             newGirl.save(function (error) {
                 if (error) {
                     console.log(error);
+                    res.status(500).send({
+                        success: false
+                    });
                 }
-                res.send({
+                res.status(200).send({
                     success: true
                 });
             });
@@ -254,8 +250,12 @@ app.get('/girlType', passport.authenticate('jwt', { session: true}),  (req, res)
         db.collection("girlTypes").find({}).toArray(function(error, girlType) {
             if (error) {
                 console.error(error);
+                res.status(500).send({
+                    success: false
+                });
             }
-            res.send({
+            res.status(200).send({
+                success: true,
                 girlType: girlType
             });
         });
@@ -270,8 +270,12 @@ app.get('/girls', passport.authenticate('jwt', { session: true}),  (req, res) =>
         Girl.find({userId: req.user._id}, 'price name updatePrice incomeInHour recoupment level', function (error, girls) {
             if (error) {
                 console.error(error);
+                res.status(500).send({
+                    success: false
+                });
             }
-            res.send({
+            res.status(200).send({
+                success: true,
                 girls: girls
             });
         }).sort({_id: -1});
@@ -283,7 +287,6 @@ app.get('/girls', passport.authenticate('jwt', { session: true}),  (req, res) =>
 app.put('/girl/:id', passport.authenticate('jwt', { session: true}),  (req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        var db = req.db;
         const period = 180,
             hours = 24,
             koeff = 1.0075;
@@ -292,13 +295,17 @@ app.put('/girl/:id', passport.authenticate('jwt', { session: true}),  (req, res)
                 console.error(error); 
             }
             girl.level = girl.level + 1;
-            girl.incomeInHour = girl.price / period / hours * (koeff ^ girl.level) + girl.level * girl.updatePrice / girl.price * girl.initialIncomeInHour * (koeff ^ girl.level);
+            girl.incomeInHour = girl.price / period / hours * (koeff ^ girl.level)
+                + girl.level * girl.updatePrice / girl.price * girl.initialIncomeInHour * (koeff ^ girl.level);
             girl.recoupment = (girl.updatePrice + girl.price * girl.level)/girl.incomeInHour/hours;
             girl.save(function (error) {
                 if (error) {
                     console.log(error);
+                    res.status(500).send({
+                        success: false
+                    });
                 }
-                res.send({
+                res.status(200).send({
                     success: true
                 });
             });
@@ -311,13 +318,12 @@ app.put('/girl/:id', passport.authenticate('jwt', { session: true}),  (req, res)
 app.delete('/girl/:id', passport.authenticate('jwt', { session: true}),  (req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        var db = req.db;
-        Girl.remove({
-            _id: req.params.id
-        }, function(err, girl){
+        Girl.remove({_id: req.params.id}, function(err, girl){
             if (err)
-                res.send(err);
-            res.send({
+                res.status(500).send({
+                    success: false
+                });
+            res.status(200).send({
                 success: true
             });
         });
