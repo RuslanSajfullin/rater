@@ -1,5 +1,5 @@
 'use strict';
-const config  = require('../../../config/mongo/db');
+const config  = require('../../../config/db');
 // In this file you can configure migrate-mongo
 
 module.exports = {

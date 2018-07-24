@@ -5,19 +5,23 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const jwt = require('jsonwebtoken');
-const config  = require('../config/mongo/db');
-const mongoose = require('mongoose');
-const db = mongoose.connection;
 const app = express();
 var User = require("../models/user");
 var Post = require("../models/post");
 var Girl = require("../models/girl");
+var db = require("../config/db");
 //TODO вынести апи в отдельную директорию
 
-mongoose.connect(config.db.uri);
-db.on("error", console.error.bind(console, "connection error"));
-db.once("open", function(callback){
+db.connect(db.connectSettings.dbSettings.uri, function(err) {
+  if(err) {
+      return console.log(err);
+  }
     console.log("Connection Succeeded");
+	  app.listen(process.env.PORT || db.connectSettings.port,function(err) {
+			if (!err)
+				console.log("Site is live");
+			else console.log(err);
+		})
 });
 
 //load passport strategies
@@ -344,14 +348,4 @@ app.delete('/sessions', passport.authenticate('jwt', { session: true}), function
     } else {
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
-});
-
-app.listen(process.env.PORT || config.port,function(err){
-
-    if (!err)
-
-        console.log("Site is live");
-
-    else console.log(err);
-
 });
