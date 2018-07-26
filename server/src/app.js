@@ -1,13 +1,13 @@
 const express = require('express');
 const passport = require('passport');
-const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const jwt = require('jsonwebtoken');
 const app = express();
 var User = require("../models/user");
-var Post = require("../models/post");
+var postController = require("../controllers/post");
+var girlController = require("../controllers/girl");
 var Girl = require("../models/girl");
 var db = require("../config/db");
 //TODO вынести апи в отдельную директорию
@@ -44,67 +44,28 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
-//Functions
+//Posts methods
 
-var getToken = function (headers) {
-    if (headers && headers.authorization) {
-        var parted = headers.authorization.split(' ');
-        if (parted.length === 2) {
-            return parted[1];
-        } else {
-            return null;
-        }
-    } else {
-        return null;
-    }
-};
+app.get('/posts',  passport.authenticate('jwt', { session: true}),  postController.all);
 
-//Methods
+app.get('/post/:id', passport.authenticate('jwt', { session: true}), postController.findById);
 
-app.get('/posts', passport.authenticate('jwt', { session: true}), (req, res) => {
-    var token = getToken(req.headers);
-    if (token) {
-        Post.find({}, 'title description', function (error, posts) {
-            if (error) {
-                console.error(error);
-            }
-            res.send({
-                posts: posts
-            });
-        }).sort({_id: -1});
-    } else {
-        return res.status(403).send({success: false, msg: 'Unauthorized.'});
-    }
-});
+app.post('/add_post', passport.authenticate('jwt', { session: true}), postController.create);
 
-app.post('/add_post', passport.authenticate('jwt', { session: true}), (req, res) => {
-    var token = getToken(req.headers);
-    if (token) {
-        var title = req.body.title;
-        var description = req.body.description;
-        var new_post = new Post({
-            title: title,
-            description: description
-        });
+app.put('/posts/:id', passport.authenticate('jwt', { session: true}), postController.update);
 
-        new_post.save(function (error) {
-            if (error) {
-                console.log(error);
-            }
-            res.send({
-                success: true
-            });
-        });
-    } else {
-        return res.status(403).send({success: false, msg: 'Unauthorized.'});
-    }
-});
+app.delete('/posts/:id', passport.authenticate('jwt', { session: true}), postController.delete);
+
+//Girls methods
+
+app.get('/girlType',  passport.authenticate('jwt', { session: true}), girlController.allTypes);
+
 
 //TODO ПРОВЕРИТЬ НЕОБХОДИМОСТЬ!
 app.get('/users', (req, res) => {
     User.find({}, 'username password', function (error, user) {
         if (error) {
-            console.error(error); 
+            console.error(error);
         }
         res.send({
             user: user
@@ -114,6 +75,7 @@ app.get('/users', (req, res) => {
 
 app.post('/user_add', (req, res) => {
     if (!req.body.username || !req.body.password) {
+    	console.log(req.body);
         res.json({success: false, msg: 'Please pass username and password.'});
     } else {
         var username = req.body.username;
@@ -154,67 +116,15 @@ app.post('/signin', function(req, res) {
     );
 });
 
-app.put('/posts/:id', passport.authenticate('jwt', { session: true}),(req, res) => {
-    var token = getToken(req.headers);
-    if (token) {
-        Post.findById(req.params.id, 'title description', function (error, post) {
-            if (error) {
-                console.error(error); 
-            }
-
-            post.title = req.body.title;
-            post.description = req.body.description;
-            post.save(function (error) {
-                if (error) {
-                    console.log(error);
-                }
-                res.send({
-                    success: true
-                });
-            });
-        });
-    } else {
-        return res.status(403).send({success: false, msg: 'Unauthorized.'});
-    }
-});
-
-app.delete('/posts/:id', passport.authenticate('jwt', { session: true}),(req, res) => {
-    var token = getToken(req.headers);
-    if (token) {
-        Post.remove({
-            _id: req.params.id
-        }, function(err, post){
-            if (err)
-                res.send(err);
-            res.send({
-                success: true
-            });
-        });
-    } else {
-        return res.status(403).send({success: false, msg: 'Unauthorized.'});
-    }
-});
-
-app.get('/post/:id', passport.authenticate('jwt', { session: true}),(req, res) => {
-    var token = getToken(req.headers);
-    if (token) {
-        Post.findById(req.params.id, 'title description', function (error, post) {
-            if (error) {
-                console.error(error); 
-            }
-            res.send(post);
-        });
-    } else {
-        return res.status(403).send({success: false, msg: 'Unauthorized.'});
-    }
-});
-
 app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) => {
     var token = getToken(req.headers);
     if (token) {
-        db.collection("girlTypes").findById({},{_id: req.params.id}).toArray(function(error, girlType) {
+        db.get().collection("girlTypes").findById({},{_id: req.params.id}).toArray(function(error, girlType) {
             if (error) {
                 console.error(error);
+								res.status(500).send({
+								success: false
+							});
             }
             var userId = req.user._id;
             var name = girlType.name;
@@ -248,25 +158,6 @@ app.post('/add_girl', passport.authenticate('jwt', { session: true}),(req, res) 
     }
 });
 
-app.get('/girlType', passport.authenticate('jwt', { session: true}),  (req, res) => {
-    var token = getToken(req.headers);
-    if (token) {
-        db.collection("girlTypes").find({}).toArray(function(error, girlType) {
-            if (error) {
-                console.error(error);
-                res.status(500).send({
-                    success: false
-                });
-            }
-            res.status(200).send({
-                success: true,
-                girlType: girlType
-            });
-        });
-    } else {
-        return res.status(403).send({success: false, msg: 'Unauthorized.'});
-    }
-});
 
 app.get('/girls', passport.authenticate('jwt', { session: true}),  (req, res) => {
     var token = getToken(req.headers);

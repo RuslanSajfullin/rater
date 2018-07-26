@@ -23,9 +23,8 @@ export default {
     return {
       newTodoText: '',
       description: '',
-      girlTypes:[
-            ],
-            selectedUser:''
+      girlTypes:[],
+      selectedUser:''
     }
   },
   mounted () {
@@ -34,7 +33,7 @@ export default {
   methods: {
     async getGirlTypes () {
       const response = await GameService.fetchGirlTypes()
-      this.girlTypes = response.data.girlType
+      this.girlTypes = response.data.girlTypes
     },
     async addGame () {
       await GameService.addGame({

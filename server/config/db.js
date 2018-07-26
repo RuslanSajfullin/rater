@@ -17,6 +17,10 @@ exports.connect = function(url, done) {
 	})
 };
 
+exports.get = function() {
+	return state.db;
+}
+
 exports.connectSettings = {
 	name: 'rest-api',
 	version: '0.0.1',
