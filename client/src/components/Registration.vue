@@ -19,12 +19,12 @@
         <div class="group">
           <input type="password" v-model="password" v-on:input="valid11"><span class="highlight"></span><span class="bar"></span>
           <label>Password</label>
-		  <div v-show="submitted">{{ message }}</div>  
+		  <div v-show="submitted">{{ message }}</div>
         </div>
         <div class="group">
           <input v-model="repassword" v-on:input="valid11"><span class="highlight"></span><span class="bar"></span>
           <label>Password confirm</label>
-		  <div v-show="submitted2">{{ messagerepassword }}</div> 
+		  <div v-show="submitted2">{{ messagerepassword }}</div>
         </div>
         <div class="group">
         </div>
@@ -50,7 +50,7 @@
 		  repassword: '',
 		  submitted: false,
 		  submitted2: false,
-		  
+
         }
       },
       methods: {
@@ -61,58 +61,56 @@
           })
           this.$router.push({ name: 'Posts' })
         },
-		async valid11  () { 
+		async valid11  () {
 		       var password = this.password,
 	   repassword = this.repassword,
 	   message = 'Пароль должен содержать ',
 	   messagerepassword;
-	   
-	   this.submitted=false; 
+
+	   this.submitted = false;
 
        if (password.length < 6 ) {
           message += 'более 6 символов ';
-		
+
 		 if (password === '') {
 			 message += 'более 6 символов ';
 		 }
-		  this.submitted=true; 
+		  this.submitted = true;
 	   }
-	  
+
        if ( password.length > 25) {
           message += 'более 25 символов';
-		  this.submitted=true; 
+		  this.submitted = true;
        }
-	   
-	   if (password.replace(/\D+/g,"") === "") 
+
+	   if (password.replace(/\D+/g,"") === "")
        {
 	      message += ', цифры ';
-		  this.submitted=true; 
+		  this.submitted = true;
 	   }
-	   
-	   if (password.match(/[A-Z]/g) + password.match(/[А-Я]/g) == 0 ) 
+
+	   if (password.match(/[A-Z]/g) + password.match(/[А-Я]/g) == 0 )
        {
 	      message += ', заглавные';
-		  this.submitted=true; 
+		  this.submitted = true;
+       }
+
+	   if (password.match(/[a-z]/g) + password.match(/[a-я]/g) == 0 )
+	   {
+         message += ', строчные';
+	      this.submitted = true;
 	   }
-	   
-	   if (password.match(/[a-z]/g) + password.match(/[a-я]/g) == 0 ) 
-       {
-	      message += ', строчные' ;
-		  this.submitted=true; 
-	   }
-   
-       if (repassword != '') {      
+	   if (repassword != '') {
          if (password !== repassword) {
              messagerepassword = 'Пароли не совпадают';
-	        this.submitted2=true; 
+	        this.submitted2 = true;
          }
-       }
-       this.message = message;
-       this.messagerepassword = messagerepassword;
-       }
-		
       }
+      this.message = message;
+      this.messagerepassword = messagerepassword;
     }
+  }
+}
 </script>
 
 <style scoped>
@@ -186,7 +184,6 @@
 
   input:focus { outline: none; }
 
-
   /* Label */
 
   label {
@@ -200,7 +197,6 @@
     transition: all 0.2s ease;
   }
 
-
   /* active */
 
   input:focus ~ label, input.used ~ label {
@@ -210,7 +206,6 @@
     /* font-size: 14px; */
     color: #4a89dc;
   }
-
 
   /* Underline */
 
@@ -234,11 +229,9 @@
 
   .bar:after { right: 50%; }
 
-
   /* active */
 
   input:focus ~ .bar:before, input:focus ~ .bar:after { width: 50%; }
-
 
   /* Highlight */
 
@@ -252,7 +245,6 @@
     opacity: 0.5;
   }
 
-
   /* active */
 
   input:focus ~ .highlight {
@@ -260,19 +252,17 @@
     animation: inputHighlighter 0.3s ease;
   }
 
-
   /* Animations */
 
   @-webkit-keyframes inputHighlighter {
     from { background: #4a89dc; }
-    to 	{ width: 0; background: transparent; }
+    to { width: 0; background: transparent; }
   }
 
   @keyframes inputHighlighter {
     from { background: #4a89dc; }
-    to 	{ width: 0; background: transparent; }
+    to { width: 0; background: transparent; }
   }
-
 
   /* Button */
 
@@ -297,7 +287,6 @@
   }
   .button:focus { outline: 0; }
 
-
   /* Button modifiers */
 
   .buttonBlue {
@@ -306,7 +295,6 @@
   }
 
   .buttonBlue:hover { background: #357bd8; }
-
 
   /* Ripples container */
 
@@ -319,7 +307,6 @@
     overflow: hidden;
     background: transparent;
   }
-
 
   /* Ripples circle */
 
@@ -340,7 +327,6 @@
     -webkit-animation: ripples .4s ease-in;
     animation: ripples .4s ease-in;
   }
-
 
   /* Ripples animation */
 

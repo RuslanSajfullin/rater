@@ -3,16 +3,36 @@
     <h1>Add game</h1>
     <div class="form">
 	      <div id="app">
-		  <ui>
-		<select v-model="selectedUser">
-        <option v-for="girlType in girlTypes" v-bind:value="girlType.name">{{girlType.name}}</option>
-	    </select>
-	</ui>
-</div>
-<agile>
-    <div class="slide slide--1"><h3>Выбрано: {{selectedUser}}</h3></div>
-</agile>
+          <select v-model="selectedUser">
+            <option v-for="girlType in girlTypes" v-bind:value="girlType">{{girlType.name}}</option>
+          </select>
+        </div>
+    <div class="slide slide--1"><h3>Выбрано: {{selectedUser.name}}</h3></div>
     </div>
+    <div>
+      <button class="app_post_btn" @click="addGirl">Add</button>
+    </div>
+    <table>
+      <tr>
+        <td width="100">name</td>
+        <td width="100">price</td>
+        <td width="100">level</td>
+        <td width="100">IncomeInHour</td>
+        <td width="100">created</td>
+        <td width="100" align="center">Action</td>
+      </tr>
+      <tr v-for="girl in girls" :key="girl._id">
+        <td>{{ girl.name }}</td>
+        <td>{{ girl.price }}</td>
+        <td>{{ girl.level }}</td>
+        <td>{{ girl.incomeInHour }}</td>
+        <td>{{ girl.created }}</td>
+        <td align="center">
+          <a href="#" @click="updateGirl(girl._id)">Level Up</a>|
+          <a href="#" @click="deleteGirl(girl._id)">Delete</a>
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 <script>
@@ -22,25 +42,42 @@ export default {
   data () {
     return {
       newTodoText: '',
-      description: '',
       girlTypes:[],
-      selectedUser:''
+      selectedUser:'',
+      girls:[]
     }
   },
   mounted () {
-    this.getGirlTypes()
+    this.getGirlTypes(),
+    this.getGirls()
   },
   methods: {
     async getGirlTypes () {
       const response = await GameService.fetchGirlTypes()
       this.girlTypes = response.data.girlTypes
     },
-    async addGame () {
-      await GameService.addGame({
-        title: this.title,
-        description: this.description
+    async getGirls() {
+      const response = await GameService.fetchGirls()
+      this.girls = response.data.girls
+      console.log(this.girls)
+    },
+    async addGirl () {
+      await GameService.addGirl({
+        id: this.selectedUser._id
       })
       this.$router.push({ name: 'Game' })
+      this.getGirls()
+    },
+    async updateGirl (id) {
+      await GameService.updateGirl(id)
+      id: this.girl._id
+      this.$router.push({name: 'Game'})
+      this.getGirls()
+    },
+    async deleteGirl (id) {
+      await GameService.deleteGirl(id)
+      this.$router.push({ name: 'Game' })
+      this.getGirls()
     },
     addNewTodo: function () {
       this.todos.push({

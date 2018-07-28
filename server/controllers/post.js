@@ -1,7 +1,7 @@
 var Post = require ("../models/post");
 var strategy = require("../config/passport/getToken");
 
-exports.all = function(req, res) {
+exports.findAll = function(req, res) {
 	var token = strategy.getToken(req.headers);
     if (token) {
 			Post.all(function(err, posts) {
@@ -82,11 +82,17 @@ exports.update = function(req, res) {
 };
 
 exports.delete = function(req, res) {
-	Post.delete(req.params.id, function(error, result) {
-		if (error)
-			res.send(error);
-		res.send({
-			success: true
-		});
-	})
+	var token = strategy.getToken(req.headers);
+	if (token) {
+		Post.delete(req.params.id, function(error, result) {
+			if (error)
+				res.send(error);
+			res.send({
+				success: true
+			});
+		})
+	}
+	else {
+		return res.status(403).send({success: false, msg: 'Unauthorized.'});
+	}
 };
