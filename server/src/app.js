@@ -9,21 +9,19 @@ var User = require("../models/user");
 var postController = require("../controllers/post");
 var girlController = require("../controllers/girl");
 var authController = require("../controllers/auth");
-var Girl = require("../models/girl");
 var db = require("../config/db");
-var Token = require("../config/passport/getToken");
 //TODO вынести апи в отдельную директорию
 
 db.connect(db.connectSettings.dbSettings.uri, function(err) {
-  if(err) {
-      return console.log(err);
-  }
+    if (err) {
+        return console.log(err);
+    }
     console.log("Connection Succeeded");
-	  app.listen(process.env.PORT || db.connectSettings.port,function(err) {
-			if (!err)
-				console.log("Site is live");
-			else console.log(err);
-		})
+    app.listen(process.env.PORT || db.connectSettings.port, function(err) {
+        if (!err)
+            console.log("Site is live");
+        else console.log(err);
+    });
 });
 
 //load passport strategies
@@ -103,8 +101,6 @@ app.post('/user_add', (req, res) => {
 });
 
 app.put('/girl/:id', passport.authenticate('jwt', { session: true}), girlController.update);
-
-
 
 app.delete('/sessions', passport.authenticate('jwt', { session: true}), function(req, res) {
     var token = getToken(req.headers);

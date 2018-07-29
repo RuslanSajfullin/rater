@@ -1,35 +1,42 @@
 const createCollection = async (db) => {
-	await db.createCollection('girlTypes', {
-		max: 10,
-		validator: { $jsonSchema: {
-				bsonType: "object",
-				required: [ "name", "price", "updatePrice", "incomeInHour", "recoupment"],
-				properties: {
-					name: {
-						bsonType : "string",
-						description: "must be a string and is required"
-					},
-					price: {
-						bsonType : "number",
-						description: "must be a number and is required"
-					},
-					updatePrice: {
-						bsonType : "number",
-						description: "must be a number and is required"
-					},
-					incomeInHour: {
-						bsonType : "number",
-						description: "must be a number and is required"
-					},
-					recoupment: {
-						bsonType : "number",
-						description: "must be a number and is required"
-					}
-				}
-			} },
-		validationAction: 'error',
-		validationLevel: 'strict',
-	})
+		await db.createCollection('girlTypes', {
+				max: 10,
+				validator: {
+						$jsonSchema: {
+								bsonType: "object",
+								required: [
+										"name",
+										"price",
+										"updatePrice",
+										"incomeInHour",
+										"recoupment"],
+								properties: {
+										name: {
+												bsonType: "string",
+												description: "must be a string and is required"
+										},
+										price: {
+												bsonType: "number",
+												description: "must be a number and is required"
+										},
+										updatePrice: {
+												bsonType: "number",
+												description: "must be a number and is required"
+										},
+										incomeInHour: {
+												bsonType: "number",
+												description: "must be a number and is required"
+										},
+										recoupment: {
+												bsonType: "number",
+												description: "must be a number and is required"
+										}
+								}
+						}
+				},
+				validationAction: 'error',
+				validationLevel: 'strict',
+		})
 };
 
 const insertCollection = async (db) => {
