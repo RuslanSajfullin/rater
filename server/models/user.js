@@ -8,7 +8,7 @@ var UserSchema = new Schema({
         required: true
     },
     balance : { type: Number, min: 0, default: 0},
-    email: { type: String, required: true},
+    email: { type: String},
     password: {
         type: String,
         minlength: 6,

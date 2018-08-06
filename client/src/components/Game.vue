@@ -118,7 +118,7 @@ export default {
     background: #f2f2f2;
   }
   table tr td {
-    padding: 10px;
+    padding: 11px;
   }
   table tr:nth-child(odd) {
     background: #f2f2f2;

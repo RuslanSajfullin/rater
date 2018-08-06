@@ -50,6 +50,31 @@ exports.findAllGirls = function(req, res) {
     }
 };
 
+exports.findGirlsBalances = function(user) {
+    Girl.allGirlsCalculate(user._id, function(err, girls) {
+        if (err) {
+            console.log(err);
+        }
+        var sum = 0;
+        var timeNow = 0;
+        for (var i = 0; i < girls.length; i++) {
+            timeNow = Date.now();
+            var time = timeNow - girls[i].chargeDate;
+            sum = sum + girls[i].incomeInHour * time / 1000 / 60 / 60;
+            //console.log(girls[i].chargeDate);
+            Girl.update(girls[i], {
+                chargeDate: timeNow
+                }, function(error, result) {
+                    if (error) {
+                        console.log(error);
+                    }
+                }
+            );
+        }
+        console.log(sum);
+    });
+};
+
 exports.create = function (req, res) {
     var token = strategy.getToken(req.headers);
     if (token) {
@@ -103,13 +128,12 @@ exports.update = function(req, res) {
                 console.error(error);
                 res.sendStatus(500);
             }
-            level = girl.level + 1;
-            incomeInHour = girl.price / period / hours * (koeff ^ girl.level)
-								+ girl.level * girl.updatePrice / girl.price *
-								girl.initialIncomeInHour * (koeff ^ girl.level);
+            incomeInHour = (girl.price / period / hours * (koeff ^ girl.level))
+								+ (girl.level * girl.updatePrice / girl.price *
+								girl.initialIncomeInHour * (koeff ^ girl.level));
             recoupment = (girl.updatePrice + girl.price * girl.level) /
 								girl.incomeInHour / hours;
-
+            level = girl.level + 1;
             Girl.update(girl, {
                 level: level,
                 incomeInHour: incomeInHour,

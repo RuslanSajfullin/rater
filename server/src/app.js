@@ -64,10 +64,25 @@ app.get('/girls', passport.authenticate('jwt', { session: true}), girlController
 
 app.post('/addGirl', passport.authenticate('jwt', { session: true}),girlController.create);
 
+app.put('/girl/:id', passport.authenticate('jwt', { session: true}), girlController.update);
+
 app.delete('/girl/:id', passport.authenticate('jwt', { session: true}), girlController.delete);
 
 app.post('/signin', authController.signin);
 
+//Balance calculating
+
+var timerId = setTimeout(function tick() {
+    User.find({}, 'username balance', function (error, user) {
+        if (error) {
+            console.error(error);
+        }
+        for (var i = 0; i < user.length; i++) {
+            girlController.findGirlsBalances(user[i]);
+        }
+    });
+    timerId = setTimeout(tick, 2000);
+}, 2000);
 
 //TODO ПРОВЕРИТЬ НЕОБХОДИМОСТЬ!
 app.get('/users', (req, res) => {
@@ -99,8 +114,6 @@ app.post('/user_add', (req, res) => {
         });
     }
 });
-
-app.put('/girl/:id', passport.authenticate('jwt', { session: true}), girlController.update);
 
 app.delete('/sessions', passport.authenticate('jwt', { session: true}), function(req, res) {
     var token = getToken(req.headers);

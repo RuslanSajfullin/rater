@@ -16,6 +16,11 @@ var GirlSchema = new Schema({
         required: true,
         type: Date,
         default: Date.now
+    },
+    chargeDate: {
+        required: true,
+        type: Date,
+        default: Date.now
     }
 });
 
@@ -53,6 +58,14 @@ exports.allGirls = function(id, cb) {
         function(error, girls) {
             cb(error, girls);
         }).sort({_id: -1});
+};
+
+exports.allGirlsCalculate = function(id, cb) {
+    Girl.find({userId: id},
+        'incomeInHour chargeDate',
+        function(error, girls) {
+            cb(error, girls);
+        });
 };
 
 exports.create = function(girl, cb) {
