@@ -8,7 +8,6 @@ const app = express();
 var User = require("../models/user");
 var postController = require("../controllers/post");
 var girlController = require("../controllers/girl");
-var authController = require("../controllers/auth");
 var userController = require("../controllers/user");
 var db = require("../config/db");
 //TODO вынести апи в отдельную директорию
@@ -69,11 +68,15 @@ app.put('/girl/:id', passport.authenticate('jwt', { session: true}), girlControl
 
 app.delete('/girl/:id', passport.authenticate('jwt', { session: true}), girlController.delete);
 
-//Authorization methods
+//User and Authorization methods
 
-app.post('/signin', authController.signin);
+app.post('/signin', userController.signin);
 
 app.post('/user_add', userController.registration);
+
+app.get('/users', userController.findAll);
+
+app.delete('/user/:id', userController.delete);
 
 //Balance calculating
 
@@ -89,17 +92,6 @@ app.post('/user_add', userController.registration);
     timerId = setTimeout(tick, 2000);
 }, 2000);
 */
-//TODO ПРОВЕРИТЬ НЕОБХОДИМОСТЬ!
-app.get('/users', (req, res) => {
-    User.find({}, 'username password', function (error, user) {
-        if (error) {
-            console.error(error);
-        }
-        res.send({
-            user: user
-        });
-    }).sort({_id:-1});
-});
 
 app.delete('/sessions', passport.authenticate('jwt', { session: true}), function(req, res) {
     var token = getToken(req.headers);

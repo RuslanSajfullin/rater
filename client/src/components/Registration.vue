@@ -22,7 +22,8 @@
 		  <div v-show="submitted">{{ message }}</div>
         </div>
         <div class="group">
-          <input v-model="repassword" v-on:input="valid11"><span class="highlight"></span><span class="bar"></span>
+          <input type="password" v-model="repassword" v-on:input="valid11"><span class="highlight"></span><span
+          class="bar"></span>
           <label>Password confirm</label>
 		  <div v-show="submitted2">{{ messagerepassword }}</div>
         </div>
@@ -40,8 +41,9 @@
 </template>
 
 <script>
-    import UserService from '@/services/UserService'
-    export default {
+  import UserService from '@/services/UserService';
+
+  export default {
       name: 'Registration',
       data () {
         return {
