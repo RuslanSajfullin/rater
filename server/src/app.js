@@ -9,6 +9,7 @@ var User = require("../models/user");
 var postController = require("../controllers/post");
 var girlController = require("../controllers/girl");
 var authController = require("../controllers/auth");
+var userController = require("../controllers/user");
 var db = require("../config/db");
 //TODO вынести апи в отдельную директорию
 
@@ -68,11 +69,15 @@ app.put('/girl/:id', passport.authenticate('jwt', { session: true}), girlControl
 
 app.delete('/girl/:id', passport.authenticate('jwt', { session: true}), girlController.delete);
 
+//Authorization methods
+
 app.post('/signin', authController.signin);
+
+app.post('/user_add', userController.registration);
 
 //Balance calculating
 
-var timerId = setTimeout(function tick() {
+/*var timerId = setTimeout(function tick() {
     User.find({}, 'username balance', function (error, user) {
         if (error) {
             console.error(error);
@@ -83,7 +88,7 @@ var timerId = setTimeout(function tick() {
     });
     timerId = setTimeout(tick, 2000);
 }, 2000);
-
+*/
 //TODO ПРОВЕРИТЬ НЕОБХОДИМОСТЬ!
 app.get('/users', (req, res) => {
     User.find({}, 'username password', function (error, user) {
@@ -94,25 +99,6 @@ app.get('/users', (req, res) => {
             user: user
         });
     }).sort({_id:-1});
-});
-
-app.post('/user_add', (req, res) => {
-    if (!req.body.username || !req.body.password) {
-        res.json({success: false, msg: 'Please pass username and password.'});
-    } else {
-        var username = req.body.username;
-        var password = req.body.password;
-        var new_user = new User({
-            username: username,
-            password: password
-        });
-        new_user.save(function (err) {
-            if (err) {
-                return res.json({success: false, msg: 'Username already exists.'});
-            }
-            res.json({success: true, msg: 'Successful created new user.'});
-        });
-    }
 });
 
 app.delete('/sessions', passport.authenticate('jwt', { session: true}), function(req, res) {

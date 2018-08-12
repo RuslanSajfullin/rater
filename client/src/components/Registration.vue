@@ -58,8 +58,14 @@
           await UserService.addUser({
             username: this.username,
             password: this.password
-          })
-          this.$router.push({ name: 'Posts' })
+          });
+          await UserService.signIn({
+            username: this.username,
+            password: this.password
+          }).then(response => {
+            localStorage.setItem('jwt',response.data.token)
+          });
+          this.$router.push({ name: 'Game' })
         },
 		async valid11  () {
 		       var password = this.password,
