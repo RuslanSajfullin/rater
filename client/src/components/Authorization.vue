@@ -45,7 +45,8 @@
 </template>
 
 <script>
-  import UserService from '@/services/UserService'
+  import UserService from '@/services/UserService';
+
   export default {
     name: 'Authorization',
     data () {
@@ -61,8 +62,8 @@
           password: this.password
         }).then(response => {
           localStorage.setItem('jwt',response.data.token)
-        })
-        this.$router.push({ name: 'Posts' })
+        });
+        this.$router.push({name: 'Game'});
       }
     }
   }

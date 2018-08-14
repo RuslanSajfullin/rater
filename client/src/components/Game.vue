@@ -3,11 +3,12 @@
     <h1>Add game</h1>
     <div class="form">
 	      <div id="app">
-          <select v-model="selectedUser">
+          <select v-model="selectedGirl">
             <option v-for="girlType in girlTypes" v-bind:value="girlType">{{girlType.name}}</option>
           </select>
         </div>
-    <div class="slide slide--1"><h3>Выбрано: {{selectedUser.name}}</h3></div>
+      <div class="slide slide--1"><h3>Выбрано: {{selectedGirl.name}}</h3></div>
+      <div class="slide slide--1"><h3>Баланс: {{user.balance}}</h3></div>
     </div>
     <div>
       <button class="app_post_btn" @click="addGirl">Add</button>
@@ -38,46 +39,53 @@
   </div>
 </template>
 <script>
-import GameService from '@/services/GameService'
-export default {
+  import GameService from '@/services/GameService';
+  import UserService from '../services/UserService';
+
+  export default {
   name: 'Girls',
   data () {
     return {
       newTodoText: '',
       girlTypes:[],
-      selectedUser:'',
-      girls:[]
+      selectedGirl: '',
+      girls: [],
+      user: [],
     }
   },
   mounted () {
     this.getGirlTypes(),
-    this.getGirls()
+      this.getGirls(),
+      this.getUser()
   },
   methods: {
     async getGirlTypes () {
-      const response = await GameService.fetchGirlTypes()
+      const response = await GameService.fetchGirlTypes();
       this.girlTypes = response.data.girlTypes
     },
     async getGirls() {
-      const response = await GameService.fetchGirls()
+      const response = await GameService.fetchGirls();
       this.girls = response.data.girls
-      console.log(this.girls)
+    },
+    async getUser() {
+      const response = await UserService.fetchUser();
+      this.user = response.data.user;
     },
     async addGirl () {
       await GameService.addGirl({
-        id: this.selectedUser._id
-      })
-      this.$router.push({ name: 'Game' })
+        id: this.selectedGirl._id,
+      });
+      this.$router.push({name: 'Game'});
       this.getGirls()
     },
     async updateGirl (id) {
-      await GameService.updateGirl(id)
-      this.$router.push({name: 'Game'})
+      await GameService.updateGirl(id);
+      this.$router.push({name: 'Game'});
       this.getGirls()
     },
     async deleteGirl (id) {
-      await GameService.deleteGirl(id)
-      this.$router.push({ name: 'Game' })
+      await GameService.deleteGirl(id);
+      this.$router.push({name: 'Game'});
       this.getGirls()
     },
     addNewTodo: function () {
@@ -85,11 +93,11 @@ export default {
         id: this.nextTodoId++,
         title: this.newTodoText,
         level: 0
-      })
+      });
       this.newTodoText = ''
     },
     removeElement: function (index) {
-      delete this.todos[index]
+      delete this.todos[index];
       this.$delete(this.todos, index)
     }
   }

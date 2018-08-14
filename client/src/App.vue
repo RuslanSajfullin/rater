@@ -7,6 +7,7 @@
 
 <script>
   import menu from './components/TopMenu.vue';
+
   export default {
     name: 'app',
     components: {

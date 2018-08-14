@@ -68,7 +68,7 @@ app.put('/girl/:id', passport.authenticate('jwt', { session: true}), girlControl
 
 app.delete('/girl/:id', passport.authenticate('jwt', { session: true}), girlController.delete);
 
-//User and Authorization methods
+//User methods
 
 app.post('/signin', userController.signin);
 
@@ -76,22 +76,29 @@ app.post('/user_add', userController.registration);
 
 app.get('/users', userController.findAll);
 
+app.get('/user', passport.authenticate('jwt', {session: true}),
+    userController.find);
+
 app.delete('/user/:id', userController.delete);
 
 //Balance calculating
 
-/*var timerId = setTimeout(function tick() {
-    User.find({}, 'username balance', function (error, user) {
+var timerId = setTimeout(function tick() {
+    User.findAll(function(error, user) {
         if (error) {
             console.error(error);
         }
+        //TODO updateMany
         for (var i = 0; i < user.length; i++) {
-            girlController.findGirlsBalances(user[i]);
+            girlController.findGirlsBalances(user[i],
+                function(userBalance, id) {
+                    userController.update(id, userBalance);
+                });
         }
     });
-    timerId = setTimeout(tick, 2000);
-}, 2000);
-*/
+    timerId = setTimeout(tick, 5000);
+}, 5000);
+
 
 app.delete('/sessions', passport.authenticate('jwt', { session: true}), function(req, res) {
     var token = getToken(req.headers);

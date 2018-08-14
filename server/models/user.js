@@ -45,13 +45,19 @@ exports.findByUsername = function(username, cb) {
 };
 
 exports.findById = function(id, cb) {
-    User.findById(id, function(error, user) {
+    User.findById(id, 'username balance', function(error, user) {
         cb(error, user);
     });
 };
 
 exports.create = function(user, cb) {
     user.save(function(error, result) {
+        cb(error, result);
+    });
+};
+
+exports.update = function(user, newData, cb) {
+    User.updateOne(user, newData, function(error, result) {
         cb(error, result);
     });
 };

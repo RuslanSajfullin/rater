@@ -62,6 +62,39 @@ exports.findAll = function(req, res) {
     });
 
 };
+exports.find = function(req, res) {
+    User.findByUsername(req.user.username, function(err, user) {
+            console.log(req.user);
+            if (err) throw err;
+            if (!user) {
+                res.send({
+                    success: false,
+                    msg: 'User not found.',
+                });
+            } else {
+                res.send({
+                    user: user,
+                });
+            }
+        },
+    );
+};
+
+exports.update = function(userId, userBalance) {
+    User.findById(userId, function(error, user) {
+        if (error) {
+            console.error(error);
+        }
+        var newBalance = user.balance + userBalance;
+
+        User.update(user, {balance: newBalance},
+            function(error, result) {
+                if (error) {
+                    console.log(error);
+                }
+            });
+    });
+};
 
 exports.delete = function(req, res) {
     User.delete(req.params.id, function(error, result) {

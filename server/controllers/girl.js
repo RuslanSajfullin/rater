@@ -50,18 +50,17 @@ exports.findAllGirls = function(req, res) {
     }
 };
 
-exports.findGirlsBalances = function(user) {
+exports.findGirlsBalances = function(user, cb) {
     Girl.allGirlsCalculate(user._id, function(err, girls) {
+        var sum = 0;
+        var timeNow = 0;
         if (err) {
             console.log(err);
         }
-        var sum = 0;
-        var timeNow = 0;
         for (var i = 0; i < girls.length; i++) {
             timeNow = Date.now();
             var time = timeNow - girls[i].chargeDate;
             sum = sum + girls[i].incomeInHour * time / 1000 / 60 / 60;
-            //console.log(girls[i].chargeDate);
             Girl.update(girls[i], {
                 chargeDate: timeNow
                 }, function(error, result) {
@@ -71,7 +70,7 @@ exports.findGirlsBalances = function(user) {
                 }
             );
         }
-        console.log(sum);
+        cb(sum, user._id);
     });
 };
 

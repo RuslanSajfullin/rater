@@ -1,7 +1,7 @@
-import Api from '@/services/Api'
+import Api from '@/services/Api';
 
 export default {
-  fetchUsers () {
+  fetchUser() {
     return Api().get('user')
   },
 
