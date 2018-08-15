@@ -88,17 +88,15 @@ var timerId = setTimeout(function tick() {
         if (error) {
             console.error(error);
         }
-        //TODO updateMany
         for (var i = 0; i < user.length; i++) {
             girlController.findGirlsBalances(user[i],
-                function(userBalance, id) {
-                    userController.update(id, userBalance);
+                function(userBalance, userId) {
+                    userController.update(userId, userBalance);
                 });
         }
     });
     timerId = setTimeout(tick, 5000);
 }, 5000);
-
 
 app.delete('/sessions', passport.authenticate('jwt', { session: true}), function(req, res) {
     var token = getToken(req.headers);
@@ -113,3 +111,5 @@ app.delete('/sessions', passport.authenticate('jwt', { session: true}), function
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
 });
+
+module.exports = app; // для тестирования

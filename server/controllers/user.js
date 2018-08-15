@@ -64,7 +64,6 @@ exports.findAll = function(req, res) {
 };
 exports.find = function(req, res) {
     User.findByUsername(req.user.username, function(err, user) {
-            console.log(req.user);
             if (err) throw err;
             if (!user) {
                 res.send({
@@ -86,7 +85,6 @@ exports.update = function(userId, userBalance) {
             console.error(error);
         }
         var newBalance = user.balance + userBalance;
-
         User.update(user, {balance: newBalance},
             function(error, result) {
                 if (error) {

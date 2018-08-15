@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node ./node_modules/nodemon/bin/nodemon.js src/app.js",
     "migrate": "migrate-mongo -f ./migrations/mongo/migrations/config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --timeout 10000"
   },
   "keywords": [],
   "author": "",
@@ -23,10 +23,12 @@
     "morgan": "^1.9.0",
     "nodemon": "^1.18.3",
     "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0",
-    "save": "^2.3.2"
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
-    "eslint": "^5.2.0"
+    "eslint": "^5.2.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "mocha": "^5.2.0"
   }
 }

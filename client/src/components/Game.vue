@@ -8,7 +8,7 @@
           </select>
         </div>
       <div class="slide slide--1"><h3>Выбрано: {{selectedGirl.name}}</h3></div>
-      <div class="slide slide--1"><h3>Баланс: {{user.balance}}</h3></div>
+      <div class="slide slide--1"><h3>Баланс: {{user.balance}} р.</h3></div>
     </div>
     <div>
       <button class="app_post_btn" @click="addGirl">Add</button>

@@ -1,6 +1,6 @@
 <template>
   <div class="menu-main"   :style="{backgroundImage:'url(bg1.jpg)'}">
- <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEvfbVN5yzKSyZtzBw7AM-VofU7UbTKT1ADsi_KTFmE8cw8cmK">
+    <img src="../assets/images/background.jpg"/>
   <ul>
     <li><router-link v-bind:to="'/'">Home</router-link></li>
     <li><router-link v-bind:to="'/authorization'">Authorization</router-link></li>
