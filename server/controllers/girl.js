@@ -132,7 +132,12 @@ exports.update = function(req, res) {
 								girl.initialIncomeInHour * (koeff ^ girl.level));
             recoupment = (girl.updatePrice + girl.price * girl.level) /
 								girl.incomeInHour / hours;
-            level = girl.level + 1;
+            if (girl.level <10) {
+                level = girl.level + 1;
+            }
+            else {
+                level = girl.level;
+            }
             Girl.update(girl, {
                 level: level,
                 incomeInHour: incomeInHour,
