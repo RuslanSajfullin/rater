@@ -8,7 +8,7 @@ exports.connect = function(url, done) {
     if (state.db) {
         return done();
     }
-    mongoose.connect(url, function(err, db) {
+    mongoose.connect(url,  { useNewUrlParser: true }, function(err, db) {
         if (err) {
             return done(err);
         }

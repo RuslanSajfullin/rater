@@ -5,9 +5,9 @@ const config  = require('../../../config/db');
 module.exports = {
 
     mongodb: {
-        url: config.db.uri,
+        url: config.connectSettings.dbSettings.uri,
 
-        databaseName: config.db.name,
+        databaseName: config.connectSettings.dbSettings.name,
 
         options: {
             useNewUrlParser: true, // removes a deprecation warning when connecting

@@ -1,6 +1,5 @@
 const createCollection = async (db) => {
 		await db.createCollection('girlTypes', {
-				max: 10,
 				validator: {
 						$jsonSchema: {
 								bsonType: "object",
